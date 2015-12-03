@@ -6,6 +6,7 @@ task main()
 while(true)
 	{
 		motor[motor1] = 127;
+		//hi
 	}
 
 }
