@@ -46,25 +46,10 @@ task drive()
 
 }
 
-task launch()
-{
-	int X1 = 127;
-	while(true)
-	{
-		if(abs(vexRT[Ch2Xmtr2]) > 0 && vexRT[Btn6UXmtr2] == 1)
-		{
-		X1 = vexRT[Ch2Xmtr2];
-		}
-	 motor[motor3] = X1;
-	}
-
-}
-
 
 task main()
 {
 	startTask(drive);
-	startTask(launch);
 
 	while(true)
 	{
