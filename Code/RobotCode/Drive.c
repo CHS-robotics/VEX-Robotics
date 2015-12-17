@@ -55,13 +55,15 @@ task main()
 	startTask(Scoop);
 	startTask(Shoot);
 	startTask(Drive);
+	clearLCDLine(0);
+	clearLCDLine(1);
 
 	while(true)
 	{
-		SensorValue(dgtl11)=0;
-		wait1Msec(1000);
-		SensorValue(dgtl11)=1;
-		wait1Msec(1000);
+		displayLCDPos(0, 0);
+		displayNextLCDString("Move Bitch");
+		displayLCDPos(1, 0);
+		displayNextLCDString("get out the way");
 
 	}
 }
