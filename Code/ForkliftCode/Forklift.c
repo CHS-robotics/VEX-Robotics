@@ -1,4 +1,5 @@
 #pragma config(Sensor, dgtl1,  Top,            sensorTouch)
+#pragma config(Sensor, dgtl2,  Bottom,         sensorTouch)
 #pragma config(Sensor, dgtl12, Over,           sensorLEDtoVCC)
 #pragma config(Motor,  port1,           LDrive,        tmotorVex393_HBridge, openLoop, driveRight)
 #pragma config(Motor,  port2,           LiftR,         tmotorVex393_MC29, openLoop, reversed)
@@ -55,17 +56,27 @@ task fork()
 
 		else
 		{
-			if(abs(vexRT[Ch2]) > threshold)
+
+			if(vexRT[Ch2] < 0 && SensorValue[Bottom] == 1 && overset == false)
 			{
-				motor[LiftR]= vexRT[Ch2];
-				motor[LiftL]= -vexRT[Ch2];
+				motor[LiftR]  = 0;
+	      motor[LiftL]  = 0;
 			}
 
 			else
 			{
-		     motor[LiftR]  = 0;
-		     motor[LiftL]  = 0;
-		  }
+				if(abs(vexRT[Ch2]) > threshold)
+				{
+					motor[LiftR]= vexRT[Ch2];
+					motor[LiftL]= -vexRT[Ch2];
+				}
+
+				else
+				{
+			     motor[LiftR]  = 0;
+			     motor[LiftL]  = 0;
+			  }
+			}
 		}
 	}
 }
