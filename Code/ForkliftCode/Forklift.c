@@ -11,6 +11,7 @@
 
 bool auto = false; //Bool containing if autopilot is enabled
 bool overset = false;
+bool calset = false;
 
 task drive()
 {
@@ -109,11 +110,76 @@ task override()
 	}
 }
 
+task blink()
+{
+	while(true)
+	{
+		if(calset==false)
+		{
+
+		}
+
+		else
+		{
+			SensorValue[Over] = true;
+			wait1Msec(1000);
+			SensorValue[Over] = false;
+			wait1Msec(1000);
+			//SensorValue[Over]=1;
+			//delay(200);
+			//SensorValue[Over]=0;
+			//delay(200);
+		}
+	}
+}
+
+task calibrate()
+{
+	while(true)
+	{
+		if(vexRT[Btn6U] == 1 && calset == false)
+		{
+			calset=true;
+			startTask(blink);
+			waitUntil(vexRT[Btn6U] == 0);
+		}
+
+		if(vexRT[Btn6U] == 1 && calset == true)
+		{
+			calset=false;
+			stopTask(blink);
+			waitUntil(vexRT[Btn6U] == 0);
+		}
+	}
+}
+
+task cal()
+{
+	int threshold = 10;	//Deadzone for joystick. Default=10
+
+	while(true)
+	{
+		if(abs(vexRT[Ch3Xmtr2]) > threshold && calset == true)
+		{
+			motor[LiftL]  = vexRT[Ch3Xmtr2];
+		}
+
+		if(abs(vexRT[Ch2Xmtr2]) > threshold && calset == true)
+		{
+			motor[LiftR]  = vexRT[Ch2Xmtr2];
+		}
+	}
+}
+
 task main()
 {
+	clearTimer(T1);
+
 	startTask(drive);
 	startTask(fork);
 	startTask(override);
+	startTask(cal);
+	startTask(calibrate);
 
 	while(true)
 	{
