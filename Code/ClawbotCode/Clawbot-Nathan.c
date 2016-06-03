@@ -13,7 +13,6 @@
 bool auto = false; //Bool containing if autopilot is enabled
 int count = 50;
 int count2 = 20;
-int count3 = 50;
 int value = 0;
 int zero = 0;
 
@@ -100,44 +99,17 @@ task drive()
 		if(auto == false) //Check if autopilot is enabled
 		{
 
-			if(vexRT[Btn7UXmtr2] == 1)
+			if(abs(vexRT[Ch2]) > threshold || abs(vexRT[Ch3]) > threshold) //Check if the joystick is past the deadzone
 			{
-				motor[LDrive]= 70;
-				motor[RDrive]= 70;
+				motor[LDrive]= vexRT[Ch2];
+				motor[RDrive]= vexRT[Ch3];
 			}
-
-			else if(vexRT[Btn7DXmtr2] == 1)
-			{
-				motor[LDrive]= -70;
-				motor[RDrive]= -70;
-			}
-
-			else if(vexRT[Btn7RXmtr2] == 1)
-			{
-				motor[LDrive]= -40;
-				motor[RDrive]= 50;
-			}
-
-			else if(vexRT[Btn7LXmtr2] == 1)
-			{
-				motor[LDrive]= 50;
-				motor[RDrive]= -40;
-			}
-
 			else
-			{
-				if(abs(vexRT[Ch2]) > threshold || abs(vexRT[Ch3]) > threshold) //Check if the joystick is past the deadzone
-				{
-					motor[LDrive]= vexRT[Ch2];
-					motor[RDrive]= vexRT[Ch3];
-				}
-				else
-			  {
-			    motor[LDrive]  = 0;
-		      motor[RDrive]  = 0;
-		      count3 = 0;
-		    }
-			}
+	    {
+	      motor[LDrive]  = 0;
+	      motor[RDrive]  = 0;
+	    }
+
 		}
 	}
 }
@@ -179,25 +151,8 @@ task arm()
 {
 	while(true)
 	{
-		if(vexRT[Ch3Xmtr2] > 10)
-		{
-			motor[LLowArm] = (vexRT[Ch3Xmtr2]/11.3)*(vexRT[Ch3Xmtr2]/11.3);
-			motor[RLowArm] = (vexRT[Ch3Xmtr2]/11.3)*(vexRT[Ch3Xmtr2]/11.3);
-		}
-
-		else if(vexRT[Ch3Xmtr2] < 10)
-		{
-			motor[LLowArm] = -(vexRT[Ch3Xmtr2]/11.3)*(vexRT[Ch3Xmtr2]/11.3);
-			motor[RLowArm] = -(vexRT[Ch3Xmtr2]/11.3)*(vexRT[Ch3Xmtr2]/11.3);
-		}
-
-		else
-		{
-			{
-			motor[LLowArm] = 0;
-			motor[RLowArm] = 0;
-		}
-		}
+		motor[LLowArm]= vexRT[Ch3Xmtr2];
+		motor[RLowArm]= vexRT[Ch3Xmtr2];
 	}
 }
 
@@ -205,19 +160,14 @@ task wrist()
 {
 	while(true)
 	{
-		if(vexRT[Btn5DXmtr2] == 1 && abs(vexRT[Ch1Xmtr2]) < 10)
+		if(vexRT[Btn7LXmtr2] == 1)
 		{
 			wristLeft();
 		}
 
-		else if(vexRT[Btn6DXmtr2] == 1 && abs(vexRT[Ch1Xmtr2]) < 10)
+		else if(vexRT[Btn7RXmtr2] == 1)
 		{
 			wristRight();
-		}
-
-		else if(abs(vexRT[Ch1Xmtr2]) > 10)
-		{
-			motor[Wrist]= -vexRT[Ch1Xmtr2]/2;
 		}
 
 		else
