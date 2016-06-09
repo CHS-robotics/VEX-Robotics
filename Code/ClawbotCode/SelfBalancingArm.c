@@ -6,6 +6,7 @@
 
 int value = 0;
 int zero = 0;
+int accl = 0;
 
 task control()
 {
@@ -47,12 +48,12 @@ task main()
 		value = SensorValue[Gyro];
 		if(value<zero-30 && abs(vexRT[Ch2]) < 10)
 		{
-			motor[UpArm]= 127;
+			motor[UpArm]= 80;
 		}
 
 		else if(value>zero+30 && abs(vexRT[Ch2]) < 10)
 		{
-			motor[UpArm]= -127;
+			motor[UpArm]= -80;
 		}
 
 		else
